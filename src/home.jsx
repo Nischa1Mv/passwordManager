@@ -14,7 +14,7 @@ function Home() {
       if (user) {
         setIsUser(user);
       } else {
-        navigate("/");
+        navigate("/login");
       }
       setLoading(false);
     });
