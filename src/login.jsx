@@ -1,5 +1,5 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { auth } from "./firebase";
 import { useNavigate } from "react-router-dom";
 
@@ -7,14 +7,25 @@ function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [ispasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [error, setError] = useState(null);
+
+useEffect (() => {
+    if(auth.currentUser) {
+      navigate("/");
+      console.log("user is logged in");
+    };  
+  }, [navigate]);
 
   const AuthLogin = async (e) => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
+        if(user) {
+          navigate("/");
+          console.log("user is logged in");
+        } 
         console.log(user);
       })
       .catch((error) => {
@@ -41,7 +52,7 @@ function Login() {
           <input
             className="border-2 border-[#1c201e] bg-transparent focus:outline-none px-2"
             type="email"
-            onClick={(e) => {
+            onChange={(e) => {
               setEmail(e.target.value);
             }}
           />
@@ -50,16 +61,17 @@ function Login() {
           <span>Password</span>
           <input
             className="border-2 border-[#1c201e] bg-transparent focus:outline-none px-2"
-            type={`${ispasswordVisible ? "text" : "password"}`}
-            onClick={(e) => {
+            type={`${isPasswordVisible ? "text" : "password"}`}
+            onChange={(e) => {
               setPassword(e.target.value);
             }}
           />
           <button
             type="button"
-            onClick={(e) => setIsPasswordVisible(!ispasswordVisible)}
+            onClick={(e) => setIsPasswordVisible(!isPasswordVisible)}
+            // onClick={ setIsPasswordVisible(!isPasswordVisible)}
           >
-            {ispasswordVisible ? (
+            {isPasswordVisible ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 height="22px"

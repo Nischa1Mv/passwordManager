@@ -7,15 +7,10 @@ function Signup() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [cpassword, setCPassword] = useState("");
   const [ispasswordVisible, setIsPasswordVisible] = useState(false);
   const [error, setError] = useState(null);
   const AuthSignup = async (e) => {
     e.preventDefault();
-    if (password !== cpassword) {
-      alert("passwords do not match");
-      return;
-    }
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {

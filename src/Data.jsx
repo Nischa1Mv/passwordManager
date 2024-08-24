@@ -33,13 +33,13 @@ const Data = () => {
                 </div>
               )}
             </div>
-            <div onClick={() => {}}>
+            <div >
               <svg
                 cursor="pointer"
                 onClick={(event) => {
                   event.preventDefault();
                   navigator.clipboard
-                    .writeText({ email })
+                    .writeText(email )
                     .then(() => {
                       setIscopiede(true);
                       setTimeout(() => {
@@ -75,13 +75,13 @@ const Data = () => {
               {isCopiedp && <Copied />}
             </div>
             {/* copy icon */}
-            <div onClick={() => {}}>
+            <div >
               <svg
                 cursor="pointer"
                 onClick={(event) => {
                   event.preventDefault();
                   navigator.clipboard
-                    .writeText({ email })
+                    .writeText(email )
                     .then(() => {
                       setIscopiedp(true);
                       setTimeout(() => {
