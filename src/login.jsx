@@ -12,7 +12,7 @@ function Login() {
 
 useEffect (() => {
     if(auth.currentUser) {
-      navigate("/");
+      navigate("/home");
       console.log("user is logged in");
     };  
   }, [navigate]);
@@ -23,7 +23,7 @@ useEffect (() => {
       .then((userCredential) => {
         const user = userCredential.user;
         if(user) {
-          navigate("/");
+          navigate("/home");
           console.log("user is logged in");
         } 
         console.log(user);
@@ -34,7 +34,8 @@ useEffect (() => {
       });
   };
 
-  return (
+  return (<>
+
     <div className=" w-screen h-screen text-white flex items-center justify-center">
       <form className="flex flex-col justify-center items-center gap-2">
         {error && (
@@ -50,7 +51,7 @@ useEffect (() => {
         <div className="gap-2 flex justify-center items-center">
           <span className="">Email</span>
           <input
-            className="border-2 border-[#1c201e] bg-transparent focus:outline-none px-2"
+            className="border-2 border-[#1c201e]  bg-transparent focus:outline-none px-2"
             type="email"
             onChange={(e) => {
               setEmail(e.target.value);
@@ -111,6 +112,8 @@ useEffect (() => {
         </div>
       </form>
     </div>
+    </>
+
   );
 }
 

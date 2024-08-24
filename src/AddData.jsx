@@ -35,6 +35,7 @@ const AddData = () => {
         </div>
         <div>
           <svg
+            className="cursor-pointer"
             onClick={{ Handlesave }}
             xmlns="http://www.w3.org/2000/svg"
             height="24px"

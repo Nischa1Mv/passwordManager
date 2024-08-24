@@ -3,6 +3,9 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
   theme: {
     extend: {
+      fontFamily: {
+        amsterdam: ['"New Amsterdam"', 'sans-serif'],
+      },
       keyframes: {
         slideUp: {
           "0%": { transform: "translateY(100%)", opacity: "0" },

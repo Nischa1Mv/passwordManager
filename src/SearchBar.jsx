@@ -1,14 +1,16 @@
 const SearchBar = () => {
+  const Search = () => {};
   return (
     <div>
-      <div className="relative">
+      <div className="relative ">
         <input
           className="border-2 border-[#1c201e] rounded-xl px-2 bg-transparent focus:outline-none "
           type="text"
           placeholder="Search"
         />
         <svg
-          className="absolute top-1 right-2"
+          onClick={() => Search()}
+          className="absolute top-1 right-2 cursor-pointer"
           xmlns="http://www.w3.org/2000/svg"
           height="20px"
           viewBox="0 -960 960 960"
