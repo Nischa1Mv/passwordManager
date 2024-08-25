@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { doc, setDoc } from "firebase/firestore";
-import { db, auth } from "./firebase";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { auth } from "./firebase";
 import { encryptPassword } from "./encrptPassword";
+const db = getFirestore();
 
 const AddData = ({ platform }) => {
   const [password, setPassword] = useState("");
@@ -14,12 +15,16 @@ const AddData = ({ platform }) => {
     try {
       const user = auth.currentUser;
       const userId = user.uid;
-      const credentialRef = doc(db, `users/${userId}/credentials/${platform}`);
       const encryptedPassword = encryptPassword(password);
-      await setDoc(credentialRef, {
+      const credentialsCollectionRef = collection(
+        db,
+        `users/${userId}/${platform}`
+      );
+
+      await addDoc(credentialsCollectionRef, {
         platform,
         email,
-        password: encryptedPassword,
+        password: encryptedPassword, // Ensure field name is consistent
         createdAt: new Date(),
         updatedAt: new Date(),
       });
@@ -39,6 +44,7 @@ const AddData = ({ platform }) => {
         <div>Email</div>
         <div>
           <input
+            required
             className="border-2 border-[#1c201e]  bg-transparent focus:outline-none px-2"
             type="email"
             value={email}
@@ -50,6 +56,7 @@ const AddData = ({ platform }) => {
         <div>Password</div>
         <div>
           <input
+            required
             className="border-2 border-[#1c201e] bg-transparent focus:outline-none px-2"
             type="password"
             value={password}
