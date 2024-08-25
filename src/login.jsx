@@ -23,7 +23,7 @@ function Login() {
       .then((userCredential) => {
         const user = userCredential.user;
         if (user) {
-          navigate("/home");
+          navigate("/");
           console.log("user is logged in");
         }
         console.log(user);
