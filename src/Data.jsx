@@ -4,11 +4,11 @@ const Data = (email) => {
   const [ispasswordVisible, setIsPasswordVisible] = useState(false);
   const [isCopiede, setIscopiede] = useState(false);
   const [isCopiedp, setIscopiedp] = useState(false);
-
+  const value = Object.values(email);
   return (
     <>
-      <div className="">
-        <div>Username /Nickname</div>
+      <div className="flex-col flex ">
+        <div className="flex items-center">Username /Nickname</div>
         <div className="flex gap-4 mt-2 ">
           <div className="flex gap-2   ">
             <div>Email</div>
@@ -16,7 +16,7 @@ const Data = (email) => {
               <input
                 className="border border-[#1c201e]  bg-transparent focus:outline-none px-2 "
                 type="email"
-                value={Object.values(email)[0]}
+                value={value[0]}
                 readOnly
               />
             </div>
@@ -27,7 +27,7 @@ const Data = (email) => {
                 onClick={(event) => {
                   event.preventDefault();
                   navigator.clipboard
-                    .writeText(email)
+                    .writeText(value[0])
                     .then(() => {
                       setIscopiede(true);
                       setTimeout(() => {
@@ -62,7 +62,7 @@ const Data = (email) => {
               <input
                 className="border border-[#1c201e] relative bg-transparent focus:outline-none px-2"
                 type={ispasswordVisible ? "text" : "password"}
-                value={Object.values(email)[1]}
+                value={value[1]}
                 readOnly
               />
             </div>
@@ -73,7 +73,7 @@ const Data = (email) => {
                 onClick={(event) => {
                   event.preventDefault();
                   navigator.clipboard
-                    .writeText(email)
+                    .writeText(value[1])
                     .then(() => {
                       setIscopiedp(true);
                       setTimeout(() => {
