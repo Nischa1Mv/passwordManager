@@ -76,7 +76,7 @@ function Main() {
           </div>{" "}
           <div className="">
             <div className="flex justify-center items-center mb-4">
-              <AddData />
+              <AddData platform={platform} />
             </div>{" "}
           </div>
           {data.length === 0 && (
