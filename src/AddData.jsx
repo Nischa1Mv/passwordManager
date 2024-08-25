@@ -24,7 +24,7 @@ const AddData = ({ platform }) => {
       await addDoc(credentialsCollectionRef, {
         platform,
         email,
-        password: encryptedPassword, // Ensure field name is consistent
+        password: encryptedPassword,
         createdAt: new Date(),
         updatedAt: new Date(),
       });

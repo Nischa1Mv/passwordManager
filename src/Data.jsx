@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Data = (email, password) => {
+const Data = (email) => {
   const [ispasswordVisible, setIsPasswordVisible] = useState(false);
   const [isCopiede, setIscopiede] = useState(false);
   const [isCopiedp, setIscopiedp] = useState(false);
@@ -9,12 +9,12 @@ const Data = (email, password) => {
     <>
       <div className="">
         <div>Username /Nickname</div>
-        <div className="flex gap-4  ">
+        <div className="flex gap-4 mt-2 ">
           <div className="flex gap-2   ">
             <div>Email</div>
             <div className="">
               <input
-                className="border border-[#1c201e]  bg-transparent focus:outline-none "
+                className="border border-[#1c201e]  bg-transparent focus:outline-none px-2 "
                 type="email"
                 value={Object.values(email)[0]}
                 readOnly
@@ -60,7 +60,7 @@ const Data = (email, password) => {
             {/* input part */}
             <div>
               <input
-                className="border border-[#1c201e] relative bg-transparent focus:outline-none"
+                className="border border-[#1c201e] relative bg-transparent focus:outline-none px-2"
                 type={ispasswordVisible ? "text" : "password"}
                 value={Object.values(email)[1]}
                 readOnly
