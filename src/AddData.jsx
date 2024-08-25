@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 import { auth } from "./firebase";
-import { encryptPassword } from "./encrptPassword";
+import { encryptPassword } from "./Cypher";
 const db = getFirestore();
 
 const AddData = ({ platform }) => {
