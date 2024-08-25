@@ -16,6 +16,7 @@ function Main() {
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log("fetching data");
       try {
         const querySnapshot = await getDocs(
           collection(db, `users/${user}/${platform}`)
@@ -23,7 +24,6 @@ function Main() {
         if (querySnapshot.empty) {
           console.log("No data available");
           setData([]);
-
           // setAccounts(false);
           return;
         }

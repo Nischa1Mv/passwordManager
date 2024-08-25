@@ -126,7 +126,7 @@ const Data = (email) => {
   );
 };
 export default Data;
-const Copied = (text) => {
+const Copied = () => {
   return (
     <>
       <div className="absolute   text-white ">copied!</div>
