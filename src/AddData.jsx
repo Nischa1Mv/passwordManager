@@ -1,11 +1,70 @@
 import { useState } from "react";
+import {
+  doc,
+  setDoc,
+  collection,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
+import { db, auth } from "./firebase";
+import { encryptPassword } from "./encrptPassword";
 
-const AddData = () => {
+const AddData = ({ platform }) => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const Handlesave = (event) => {
+
+  const handleSave = async (event) => {
     event.preventDefault();
-    console.log("email", email, "password", password);
+
+    try {
+      const user = auth.currentUser;
+      if (!user) {
+        console.error("User not authenticated");
+        return;
+      }
+
+      const userId = user.uid;
+      const platformDocRef = doc(
+        collection(db, "users", userId, "credentials"),
+        platform
+      );
+
+      // Check if the account already exists
+      const accountsQuery = query(
+        collection(db, "users", userId, "credentials", platform, "accounts"),
+        where("email", "==", email)
+      );
+      const querySnapshot = await getDocs(accountsQuery);
+
+      if (!querySnapshot.empty) {
+        console.error("An account with this email already exists");
+        return;
+      }
+
+      const encryptedPassword = encryptPassword(password);
+
+      // Add new account
+      await setDoc(
+        platformDocRef,
+        {
+          platform: platform,
+          accounts: [
+            {
+              email: email,
+              encryptedPassword: encryptedPassword,
+            },
+          ],
+        },
+        { merge: true }
+      );
+
+      console.log("Data saved successfully!");
+      setEmail("");
+      setPassword("");
+    } catch (error) {
+      console.error("Error saving data:", error);
+    }
   };
 
   return (
@@ -36,7 +95,7 @@ const AddData = () => {
         <div>
           <svg
             className="cursor-pointer"
-            onClick={{ Handlesave }}
+            onClick={handleSave}
             xmlns="http://www.w3.org/2000/svg"
             height="24px"
             viewBox="0 -960 960 960"
