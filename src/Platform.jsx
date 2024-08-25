@@ -10,6 +10,7 @@ function Platform({ setPlatform, name }) {
 
   const choosePlatform = () => {
     setPlatform(name);
+    console.log(name);
   };
 
   return (

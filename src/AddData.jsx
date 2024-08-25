@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-  doc,
-  setDoc,
-  collection,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { db, auth } from "./firebase";
 import { encryptPassword } from "./encrptPassword";
 
@@ -14,50 +7,22 @@ const AddData = ({ platform }) => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
 
+  //saving data to firestore
   const handleSave = async (event) => {
     event.preventDefault();
 
     try {
       const user = auth.currentUser;
-      if (!user) {
-        console.error("User not authenticated");
-        return;
-      }
-
       const userId = user.uid;
-      const platformDocRef = doc(
-        collection(db, "users", userId, "credentials"),
-        platform
-      );
-
-      // Check if the account already exists
-      const accountsQuery = query(
-        collection(db, "users", userId, "credentials", platform, "accounts"),
-        where("email", "==", email)
-      );
-      const querySnapshot = await getDocs(accountsQuery);
-
-      if (!querySnapshot.empty) {
-        console.error("An account with this email already exists");
-        return;
-      }
-
+      const credentialRef = doc(db, `users/${userId}/credentials/${platform}`);
       const encryptedPassword = encryptPassword(password);
-
-      // Add new account
-      await setDoc(
-        platformDocRef,
-        {
-          platform: platform,
-          accounts: [
-            {
-              email: email,
-              encryptedPassword: encryptedPassword,
-            },
-          ],
-        },
-        { merge: true }
-      );
+      await setDoc(credentialRef, {
+        platform,
+        email,
+        password: encryptedPassword,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
 
       console.log("Data saved successfully!");
       setEmail("");
@@ -69,6 +34,7 @@ const AddData = ({ platform }) => {
 
   return (
     <>
+      <div>{platform}</div>
       <div className="flex gap-2   ">
         <div>Email</div>
         <div>

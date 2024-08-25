@@ -15,9 +15,9 @@ function Main() {
       <div className="flex-col w-[60%] h-full overflow-y-auto border-2 border-[#1c201e] flex items-center py-4 gap-4 overflow-y">
         <AddData platform={platform} />
         <Data platform={platform} />
-        <Data />
-        <Data />
-        <Data />
+        <Data platform={platform} />
+        <Data platform={platform} />
+        <Data platform={platform} />
       </div>
     </div>
   );
