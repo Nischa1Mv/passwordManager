@@ -4,7 +4,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        amsterdam: ['"New Amsterdam"', 'sans-serif'],
+        amsterdam: ['"New Amsterdam"', "sans-serif"],
+        roboto: ["Roboto", "sans-serif"],
       },
       keyframes: {
         slideUp: {

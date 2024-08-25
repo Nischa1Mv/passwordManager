@@ -51,9 +51,24 @@ function Main() {
     <>
       <div className="flex w-full h-[81vh] gap-1">
         <div className="border-2 w-[40%] h-full border-[#1c201e] flex flex-col gap-2 py-2 px-4 items-center">
-          <Platform setPlatform={setPlatform} name="steam" />
-          <Platform setPlatform={setPlatform} name="github" />
-          <Platform setPlatform={setPlatform} name="google" />
+          <div className="flex justify-center items-center text-4xl font-amsterdam mb-5">
+            Platforms
+          </div>{" "}
+          <Platform
+            setPlatform={setPlatform}
+            platform={platform}
+            name="Steam"
+          />
+          <Platform
+            setPlatform={setPlatform}
+            platform={platform}
+            name="Github"
+          />
+          <Platform
+            setPlatform={setPlatform}
+            platform={platform}
+            name="Google"
+          />
         </div>
         <div className="flex-col w-[60%] h-full  overflow-y-auto border-2 border-[#1c201e] flex items-center  py-4 gap-4">
           <div className="flex justify-center items-center text-4xl font-amsterdam mb-5">

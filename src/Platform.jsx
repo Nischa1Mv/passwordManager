@@ -1,7 +1,7 @@
 import React from "react";
 // import image from "./steam.png";
 
-function Platform({ setPlatform, name }) {
+function Platform({ setPlatform, name, platform }) {
   // const platformImages = {
   //   steam: "./steam.png",
   //   github: "./github.png",
@@ -16,12 +16,13 @@ function Platform({ setPlatform, name }) {
     <>
       {" "}
       <div
-        className=" rounded-md w-full flex gap-4 px-2 py-1 border-[#1c201e] hover:bg-[#8f8c8c] cursor-pointer "
+        className={` rounded-md w-full flex gap-4 px-2 py-1 border-[#1c201e] hover:bg-[#8f8c8c] cursor-pointer font-roboto text-[#555454] hover:text-[#ffff] ${
+          platform == name && "bg-white hover:bg-white hover:text-[#555454]"
+        } `}
         onClick={() => {
           choosePlatform();
         }}
       >
-        {" "}
         <div className="flex justify-center items-center">
           <svg
             className="rounded-full"
