@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 function Login() {
   const navigate = useNavigate();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const initialState = {
     email: "",
     password: "",
@@ -39,6 +40,13 @@ function Login() {
 
   const AuthLogin = async (e) => {
     e.preventDefault();
+
+    // for the button submitting state
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
     const { email, password } = state;
     try {
       const userCredential = await signInWithEmailAndPassword(
@@ -82,17 +90,9 @@ function Login() {
     <>
       <div className=" w-screen h-screen text-white flex items-center justify-center">
         <form className="flex flex-col justify-center items-center gap-2">
-          {error && (
-            <>
-              <div className="flex flex-col justify-center items-center text-yellow-300">
-                {" "}
-                <div> Error Occured: {error}</div>{" "}
-              </div>
-            </>
-          )}
-          <div className="text-xl">Login </div>
+          <div className="text-3xl  font-amsterdam">Login </div>
           <div className="gap-2 flex justify-center items-center">
-            <span className="">Email</span>
+            <span className="text-lg font-semibold mr-2">Email</span>
             <input
               className="border-2 border-[#1c201e]  bg-transparent focus:outline-none px-2"
               type="email"
@@ -102,7 +102,7 @@ function Login() {
             />
           </div>
           <div className="flex justify-center items-center gap-2">
-            <span>Password</span>
+            <span className="text-lg mr-2 font-semibold">Password</span>
             <input
               className="border-2 border-[#1c201e] bg-transparent focus:outline-none px-2"
               type={`${isPasswordVisible ? "text" : "password"}`}
@@ -141,17 +141,29 @@ function Login() {
               )}
             </button>
           </div>
+          {error && (
+            <>
+              <div className="flex flex-col justify-end text-sm  items-center text-red-500">
+                {" "}
+                <div> Error Occured: {error}</div>{" "}
+              </div>
+            </>
+          )}
 
           <button
-            className="px-2 py-1 border-2 rounded-xl "
+            className={`px-6 text- py-1 mt-2  border-2 rounded-xl transition-transform duration-200 cursor-pointer ${
+              isLoading ? "opacity-50 cursor-not-allowed" : "hover:scale-105"
+            }`}
+            type="button"
             onClick={AuthLogin}
+            disabled={isLoading || !state.email || !state.password}
           >
-            Submit
+            {isLoading ? "Logging In..." : "Login"}
           </button>
-          <div>
+          <div className="mt-1">
             dont have an account ?{" "}
             <span
-              className="text-amber-200 underline cursor-pointer"
+              className="text-amber-200 cursor-pointer"
               onClick={() => {
                 navigate("/signup");
               }}
