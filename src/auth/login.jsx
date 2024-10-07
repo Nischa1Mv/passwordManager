@@ -90,7 +90,7 @@ function Login() {
     <>
       <div className=" w-screen h-screen text-white flex items-center justify-center">
         <form className="flex flex-col justify-center items-center gap-2">
-          <div className="text-3xl  font-amsterdam">Login </div>
+          <div className="text-3xl  font-amsterdam mb-3">Login </div>
           <div className="gap-2 flex justify-center items-center">
             <span className="text-lg font-semibold mr-2">Email</span>
             <input
@@ -116,7 +116,6 @@ function Login() {
             <button
               type="button"
               onClick={(e) => setIsPasswordVisible(!isPasswordVisible)}
-              // onClick={ setIsPasswordVisible(!isPasswordVisible)}
             >
               {isPasswordVisible ? (
                 <svg

@@ -1,100 +1,152 @@
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import { auth } from "./firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import InputWithLabel from "../custom Componets/inputWithLabel";
 
 function Signup() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [ispasswordVisible, setIsPasswordVisible] = useState(false);
-  const [error, setError] = useState(null);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isCPasswordVisible, setIsCPasswordVisible] = useState(false);
+  const [isTermsAccepted, setIsTermsAccepted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const initialState = {
+    email: "",
+    password: "",
+    confirm_password: "",
+    error: null,
+    isLoggedIn: false,
+  };
+
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case "SET_EMAIL":
+        return { ...state, email: action.payload };
+      case "SET_PASSWORD":
+        return { ...state, password: action.payload };
+      case "SET_CONFIRM_PASSWORD":
+        return { ...state, confirm_password: action.payload };
+      case "SIGNUP_SUCCESS":
+        return { ...state, isLoggedIn: true, error: null };
+      case "SIGNUP_FAILURE":
+        return { ...state, error: action.payload };
+      case "LOGOUT":
+        return initialState;
+      default:
+        return state;
+    }
+  };
+
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { email, password, confirm_password, error } = state;
+
   const AuthSignup = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log(user);
-      })
-      .catch((error) => {
-        setError(error);
-        console.log(error.code, error.message);
+    if (!isTermsAccepted) {
+      dispatch({
+        type: "SIGNUP_FAILURE",
+        payload: "You must accept the terms.",
       });
+      setIsLoading(false);
+      return;
+    }
+
+    if (password !== confirm_password) {
+      dispatch({ type: "SIGNUP_FAILURE", payload: "Passwords do not match." });
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      dispatch({ type: "SIGNUP_SUCCESS" });
+      navigate("/");
+    } catch (error) {
+      let errorMessage = error.message;
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          errorMessage = "Email already in use";
+          break;
+        case "auth/weak-password":
+          errorMessage = "Password is too weak";
+          break;
+        default:
+          errorMessage = error.message;
+      }
+      dispatch({ type: "SIGNUP_FAILURE", payload: errorMessage });
+    } finally {
+      setIsLoading(false);
+    }
   };
+
   return (
-    <div className=" w-screen h-screen text-white flex items-center justify-center">
-      <form className="flex flex-col justify-center items-center gap-2">
+    <div className="w-screen h-screen text-white flex items-center justify-center">
+      <form
+        className="flex flex-col justify-center items-center gap-2"
+        onSubmit={AuthSignup}
+      >
+        <div className="text-3xl font-amsterdam mb-3">Signup</div>
+
+        <InputWithLabel
+          label="Email"
+          value={email}
+          onChange={(e) =>
+            dispatch({ type: "SET_EMAIL", payload: e.target.value })
+          }
+          type="email"
+        />
+        <InputWithLabel
+          label="Password"
+          value={password}
+          onChange={(e) =>
+            dispatch({ type: "SET_PASSWORD", payload: e.target.value })
+          }
+          type={isPasswordVisible ? "text" : "password"}
+          isPasswordVisible={isPasswordVisible}
+          setIsPasswordVisible={setIsPasswordVisible}
+        />
+        <InputWithLabel
+          label="Confirm Password"
+          value={confirm_password}
+          onChange={(e) =>
+            dispatch({ type: "SET_CONFIRM_PASSWORD", payload: e.target.value })
+          }
+          type={isCPasswordVisible ? "text" : "password"}
+          isPasswordVisible={isCPasswordVisible}
+          setIsPasswordVisible={setIsCPasswordVisible}
+        />
+
+        <div className="flex items-center gap-1 mt-3">
+          <input
+            type="checkbox"
+            checked={isTermsAccepted}
+            onChange={() => setIsTermsAccepted(!isTermsAccepted)}
+          />
+          <p>Terms and Conditions</p>
+        </div>
         {error && (
-          <>
-            <div className="flex flex-col justify-center items-center text-yellow-300">
-              {" "}
-              <div> Error Occured: {error.message}</div>{" "}
-              <div> Error code: {error.code}</div>
-            </div>
-          </>
+          <div className="flex flex-col justify-center items-center text-red-500">
+            <div>Error Occurred: {error}</div>
+          </div>
         )}
-        <div className="text-xl">Signup</div>
-        <div className="gap-2 flex justify-center items-center">
-          <span className="">Email</span>
-          <input
-            className="border-2 border-[#1c201e] bg-transparent focus:outline-none px-2"
-            type="email"
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-          />
-        </div>
-        <div className="flex justify-center items-center gap-2">
-          <span>Password</span>
-          <input
-            className="border-2 border-[#1c201e] bg-transparent focus:outline-none px-2"
-            type={`${ispasswordVisible ? "text" : "password"}`}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-          />
-          <button
-            type="button"
-            onClick={(e) => setIsPasswordVisible(!ispasswordVisible)}
-          >
-            {ispasswordVisible ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="22px"
-                viewBox="0 -960 960 960"
-                width="22px"
-                fill="#1c201e"
-              >
-                <path d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z" />
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="22px"
-                viewBox="0 -960 960 960"
-                width="22px"
-                fill="#1c201e"
-              >
-                <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z" />
-              </svg>
-            )}
-          </button>
-        </div>
-        <div className="flex gap-1">
-          <input type="checkbox" />
-          <p>terms and conditons</p>
-        </div>
-        <button className="px-2 py-1 border-2 rounded-xl " onClick={AuthSignup}>
-          Submit
+        <button
+          className={`px-6 py-1 mt-2 border-2 rounded-xl transition-transform duration-200 cursor-pointer ${
+            isLoading ? "opacity-50 " : "hover:scale-105"
+          }`}
+          type="submit"
+          disabled={isLoading || !isTermsAccepted || !email || !password}
+        >
+          {isLoading ? "Logging In..." : "Submit"}
         </button>
+
         <div>
-          already have an account ?{" "}
+          Already have an account?{" "}
           <span
-            className="text-amber-200 underline cursor-pointer"
-            onClick={() => {
-              navigate("/login");
-            }}
+            className="text-amber-200 cursor-pointer mt-1"
+            onClick={() => navigate("/login")}
           >
             Login
           </span>
