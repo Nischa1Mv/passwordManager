@@ -1,15 +1,35 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { auth } from "./firebase";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [error, setError] = useState(null);
-
+  const initialState = {
+    email: "",
+    password: "",
+    error: null,
+    isLoggedIn: false,
+  };
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case "SET_EMAIL":
+        return { ...state, email: action.payload };
+      case "SET_PASSWORD":
+        return { ...state, password: action.payload };
+      case "LOGIN_SUCCESS":
+        return { ...state, isLoggedIn: true, error: null };
+      case "LOGIN_FAILURE":
+        return { ...state, error: action.payload };
+      case "LOGOUT":
+        return initialState;
+      default:
+        return state;
+    }
+  };
+  const [state, dispatchEvent] = useReducer(reducer, initialState);
+  const { error } = state;
   useEffect(() => {
     if (auth.currentUser) {
       navigate("/");
@@ -19,19 +39,43 @@ function Login() {
 
   const AuthLogin = async (e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        if (user) {
-          navigate("/");
-          console.log("user is logged in");
-        }
-        console.log(user);
-      })
-      .catch((error) => {
-        setError(error);
-        console.log(error.code, error.message);
-      });
+    const { email, password } = state;
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      dispatchEvent({ type: "LOGIN_SUCCESS" });
+      navigate("/");
+      console.log("user is logged in");
+    } catch (error) {
+      let errorMessage = error.message;
+      switch (error.code) {
+        case "auth/invalid-email":
+          errorMessage = "Invalid Email";
+          break;
+        case "auth/user-not-found":
+          errorMessage = "User not found";
+          break;
+        case "auth/invalid-credential":
+          errorMessage = "Invalid Credential";
+          break;
+
+        case "auth/wrong-password":
+          errorMessage = "Wrong Password";
+          break;
+        case "auth/too-many-requests":
+          errorMessage = "Too many failed attempts. Please try again later.";
+          break;
+        default:
+          errorMessage = "An unexpected error occurred. Please try again.";
+          break;
+      }
+      dispatchEvent({ type: "LOGIN_FAILURE", payload: errorMessage });
+      console.log(error.code, error.message);
+    }
   };
 
   return (
@@ -42,8 +86,7 @@ function Login() {
             <>
               <div className="flex flex-col justify-center items-center text-yellow-300">
                 {" "}
-                <div> Error Occured: {error.message}</div>{" "}
-                <div> Error code: {error.code}</div>
+                <div> Error Occured: {error}</div>{" "}
               </div>
             </>
           )}
@@ -53,9 +96,9 @@ function Login() {
             <input
               className="border-2 border-[#1c201e]  bg-transparent focus:outline-none px-2"
               type="email"
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
+              onChange={(e) =>
+                dispatchEvent({ type: "SET_EMAIL", payload: e.target.value })
+              }
             />
           </div>
           <div className="flex justify-center items-center gap-2">
@@ -63,9 +106,12 @@ function Login() {
             <input
               className="border-2 border-[#1c201e] bg-transparent focus:outline-none px-2"
               type={`${isPasswordVisible ? "text" : "password"}`}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
+              onChange={(e) =>
+                dispatchEvent({
+                  type: "SET_PASSWORD",
+                  payload: e.target.value,
+                })
+              }
             />
             <button
               type="button"
