@@ -1,10 +1,10 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore/lite";
-const apiKey = process.env.REACT_APP_FIREBASE_API_KEY;
+
 
 const firebaseConfig = {
-  apiKey: apiKey,
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: "password-manager-30ac1.firebaseapp.com",
   projectId: "password-manager-30ac1",
   storageBucket: "password-manager-30ac1.appspot.com",
