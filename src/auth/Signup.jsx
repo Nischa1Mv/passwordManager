@@ -125,7 +125,7 @@ function Signup() {
             checked={isTermsAccepted}
             onChange={() => setIsTermsAccepted(!isTermsAccepted)}
           />
-          <p>Terms and Conditions</p>
+          <p>I Agree to the Terms and Conditions</p>
         </div>
         {error && (
           <div className="flex flex-col justify-center items-center text-red-500">

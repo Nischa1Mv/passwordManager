@@ -8,6 +8,7 @@ function Login() {
   const navigate = useNavigate();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const initialState = {
     email: "",
     password: "",
@@ -32,7 +33,15 @@ function Login() {
   };
   const [state, dispatchEvent] = useReducer(reducer, initialState);
   const { email, password, error } = state;
+
   useEffect(() => {
+    const savedEmail = localStorage.getItem("email");
+    const savedPassword = localStorage.getItem("password");
+    if (savedEmail && savedPassword) {
+      dispatchEvent({ type: "SET_EMAIL", payload: savedEmail });
+      dispatchEvent({ type: "SET_PASSWORD", payload: savedPassword });
+      setRememberMe(true);
+    }
     if (auth.currentUser) {
       navigate("/");
       console.log("user is logged in");
@@ -49,6 +58,7 @@ function Login() {
     }, 2000);
 
     const { email, password } = state;
+
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -56,6 +66,13 @@ function Login() {
         password
       );
       const user = userCredential.user;
+      if (rememberMe) {
+        localStorage.setItem("email", email);
+        localStorage.setItem("password", password);
+      } else {
+        localStorage.removeItem("email");
+        localStorage.removeItem("password");
+      }
       dispatchEvent({ type: "LOGIN_SUCCESS" });
       navigate("/");
       console.log("user is logged in");
@@ -84,6 +101,8 @@ function Login() {
       }
       dispatchEvent({ type: "LOGIN_FAILURE", payload: errorMessage });
       console.log(error.code, error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -112,7 +131,14 @@ function Login() {
             isPasswordVisible={isPasswordVisible}
             setIsPasswordVisible={setIsPasswordVisible}
           />
-
+          <div className=" mt-2 flex gap-2">
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={() => setRememberMe((prev) => !prev)}
+            />
+            <span>Remember Me</span>
+          </div>
           {error && (
             <>
               <div className="flex flex-col justify-end text-sm  items-center text-red-500">
