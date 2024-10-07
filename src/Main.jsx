@@ -3,7 +3,7 @@ import Platform from "./Platform";
 import AddData from "./AddData";
 import { useEffect, useState } from "react";
 import { getDocs, collection, getFirestore } from "firebase/firestore";
-import { auth } from "./firebase";
+import { auth } from "./auth/firebase";
 import { decryptPassword } from "./Cypher";
 
 const db = getFirestore();
@@ -12,40 +12,42 @@ function Main() {
   const user = auth.currentUser.uid;
   const [platform, setPlatform] = useState("steam");
   const [data, setData] = useState([]);
-  // const [accounts, setAccounts] = useState(true);
+  const [loading, setLoading] = useState(false); // Add loading state
+  const [error, setError] = useState(null); // Add error state for better UX
+
+  const fetchData = async () => {
+    setLoading(true); // Start loading
+    setError(null); // Reset error
+    try {
+      const querySnapshot = await getDocs(
+        collection(db, `users/${user}/${platform}`)
+      );
+      if (querySnapshot.empty) {
+        setData([]);
+        setLoading(false); // Stop loading
+        return;
+      }
+      const account = querySnapshot.docs.map((doc) => {
+        const docData = doc.data();
+        const password = decryptPassword(docData.password);
+        return { email: docData.email, password: password };
+      });
+      setData(account);
+    } catch (error) {
+      setError("Error fetching data. Please try again."); // Set error message
+    } finally {
+      setLoading(false); // Stop loading
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      console.log("fetching data");
-      try {
-        const querySnapshot = await getDocs(
-          collection(db, `users/${user}/${platform}`)
-        );
-        if (querySnapshot.empty) {
-          console.log("No data available");
-          setData([]);
-          // setAccounts(false);
-          return;
-        }
-        const account = querySnapshot.docs.map((doc) => {
-          const docData = doc.data();
-          // console.log(docData);
-          const password = decryptPassword(docData.password);
-          // console.log(password);
-          // console.log(docData.email);
-          return { email: docData.email, password: password };
-        });
-        setData(account);
-        // console.log(data);
-
-        // setAccounts(true);
-      } catch (error) {
-        console.log("Error getting documents: ", error);
-      }
-    };
-    console.log(data);
     fetchData();
   }, [platform, user]);
+
+  // Pass this function to AddData to trigger re-fetch
+  const handleDataAdded = () => {
+    fetchData();
+  };
 
   return (
     <>
@@ -70,22 +72,33 @@ function Main() {
             name="Google"
           />
         </div>
-        <div className="flex-col w-[60%] h-full  overflow-y-auto border-2 border-[#1c201e] flex items-center  py-4 gap-4">
+
+        <div className="flex-col w-[60%] h-full overflow-y-auto border-2 border-[#1c201e] flex items-center py-4 gap-4">
           <div className="flex justify-center items-center text-4xl font-amsterdam mb-5">
             Your Accounts
           </div>{" "}
-          <div className="">
-            <div className="flex justify-center items-center mb-4">
-              <AddData platform={platform} />
-            </div>{" "}
+          <div className="flex justify-center items-center mb-4">
+            <AddData platform={platform} onDataAdded={handleDataAdded} />
           </div>
-          {data.length === 0 && (
+          {/* Display loading message or spinner */}
+          {loading && (
+            <div className="bg-white text-black font-bold px-2">
+              Loading accounts...
+            </div>
+          )}
+          {/* Show error message if there is one */}
+          {error && (
+            <div className="bg-red-500 text-white font-bold px-2">{error}</div>
+          )}
+          {/* No Accounts Found */}
+          {!loading && data.length === 0 && !error && (
             <div className="bg-white text-black font-bold px-2">
               No Accounts Found
             </div>
           )}
+          {/* Display Data */}
           <div>
-            {data &&
+            {!loading &&
               data.map((item, index) => (
                 <Data key={index} email={item.email} password={item.password} />
               ))}

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
-import { auth } from "./firebase";
+import { auth } from "./auth/firebase";
 import { encryptPassword } from "./Cypher";
 const db = getFirestore();
 
-const AddData = ({ platform }) => {
+const AddData = ({ platform, onDataAdded }) => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
 
@@ -30,6 +30,7 @@ const AddData = ({ platform }) => {
       });
 
       console.log("Data saved successfully!");
+      onDataAdded();
       setEmail("");
       setPassword("");
     } catch (error) {

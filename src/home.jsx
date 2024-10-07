@@ -1,6 +1,6 @@
 import SearchBar from "./SearchBar";
 import { useNavigate } from "react-router-dom";
-import { auth } from "./firebase";
+import { auth } from "./auth/firebase";
 import { useEffect, useState } from "react";
 import Main from "./Main";
 import Loading from "./loading";
