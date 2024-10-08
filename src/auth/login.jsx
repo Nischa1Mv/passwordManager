@@ -37,11 +37,11 @@ function Login() {
   useEffect(() => {
     const savedEmail = localStorage.getItem("email");
     const savedPassword = localStorage.getItem("password");
-    if (savedEmail && savedPassword) {
-      dispatchEvent({ type: "SET_EMAIL", payload: savedEmail });
-      dispatchEvent({ type: "SET_PASSWORD", payload: savedPassword });
-      setRememberMe(true);
-    }
+    // if (savedEmail && savedPassword) {
+    //   dispatchEvent({ type: "SET_EMAIL", payload: savedEmail });
+    //   dispatchEvent({ type: "SET_PASSWORD", payload: savedPassword });
+    //   setRememberMe(true);
+    // }
     if (auth.currentUser) {
       navigate("/");
       console.log("user is logged in");
