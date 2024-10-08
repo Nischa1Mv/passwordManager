@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Data = (email) => {
+const Data = ({ email, password, username, deleteData }) => {
   const [ispasswordVisible, setIsPasswordVisible] = useState(false);
   const [isCopiede, setIscopiede] = useState(false);
   const [isCopiedp, setIscopiedp] = useState(false);
@@ -8,7 +8,28 @@ const Data = (email) => {
   return (
     <>
       <div className="flex-col flex ">
-        <div className="flex items-center text-md ">Username <span className="ml-2  flex justify-center items-center font-amsterdam"> {value[2]} </span></div>
+        <div className="flex items-start  justify-start text-md ">
+          {" "}
+          <span className=" text-xl  flex justify-center items-center font-amsterdam">
+            {" "}
+            {username}{" "}
+          </span>
+          <span className="ml-4">
+            <svg
+              onClick={() => {
+                deleteData(email);
+              }}
+              className="cursor-pointer"
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="20px"
+              fill="#e8eaed"
+            >
+              <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+            </svg>
+          </span>
+        </div>
         <div className="flex gap-4 mt-2 ">
           <div className="flex gap-2   ">
             <div>Email</div>
@@ -16,7 +37,7 @@ const Data = (email) => {
               <input
                 className="border border-[#1c201e]  bg-transparent focus:outline-none px-2 "
                 type="email"
-                value={value[0]}
+                value={email}
                 readOnly
               />
             </div>
@@ -27,7 +48,7 @@ const Data = (email) => {
                 onClick={(event) => {
                   event.preventDefault();
                   navigator.clipboard
-                    .writeText(value[0])
+                    .writeText(email)
                     .then(() => {
                       setIscopiede(true);
                       setTimeout(() => {
@@ -62,7 +83,7 @@ const Data = (email) => {
               <input
                 className="border border-[#1c201e] relative bg-transparent focus:outline-none px-2"
                 type={ispasswordVisible ? "text" : "password"}
-                value={value[1]}
+                value={password}
                 readOnly
               />
             </div>
@@ -73,7 +94,7 @@ const Data = (email) => {
                 onClick={(event) => {
                   event.preventDefault();
                   navigator.clipboard
-                    .writeText(value[1])
+                    .writeText(password)
                     .then(() => {
                       setIscopiedp(true);
                       setTimeout(() => {

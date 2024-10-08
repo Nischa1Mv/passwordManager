@@ -4,7 +4,7 @@ import { auth } from "./auth/firebase";
 import { encryptPassword } from "./Cypher";
 const db = getFirestore();
 
-const AddData = ({ platform, onDataAdded }) => {
+const AddData = ({ platform, onDataAdded, setAdddetails, addDetails }) => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -13,6 +13,13 @@ const AddData = ({ platform, onDataAdded }) => {
   //saving data to firestore
   const handleSave = async (event) => {
     event.preventDefault();
+    if (!email || !password || !username) {
+      setError("Please fill all the details");
+      setTimeout(() => {
+        setError("");
+      }, 500);
+      return;
+    }
 
     try {
       const user = auth.currentUser;
@@ -31,7 +38,7 @@ const AddData = ({ platform, onDataAdded }) => {
         createdAt: new Date(),
         updatedAt: new Date(),
       });
-
+      setAdddetails(!addDetails);
       setError("Account is Added");
       setTimeout(() => {
         setError("");
@@ -41,32 +48,31 @@ const AddData = ({ platform, onDataAdded }) => {
       setEmail("");
       setPassword("");
     } catch (error) {
-      console.error("Error saving data:", error);
+      setError("Error saving data");
+      console.error("Error saving data", error);
     }
   };
   return (
     <>
       <div className="flex flex-col gap-5 ">
-        <div className="w-full text-2xl font-amsterdam flex justify-center items-center">
-          {" "}
-          Add Your Details
-        </div>
         <div className="flex gap-4  justify-center items-center">
-        <div>Username</div>
-        <input
-          required
-          className="border-2 border-[#1c201e]  bg-transparent focus:outline-none px-2"
-          type="text"
-          value={username}
-          onChange={(event) => {
-            setUsername(event.target.value);
-          }}
-        />
+          <div>Username</div>
+          <input
+            placeholder="Username"
+            required
+            className="border-2 border-[#1c201e]  bg-transparent focus:outline-none px-2"
+            type="text"
+            value={username}
+            onChange={(event) => {
+              setUsername(event.target.value);
+            }}
+          />
         </div>
         <div className="flex gap-4   ">
           <div>Email</div>
           <div>
             <input
+              placeholder="Email"
               required
               className="border-2 border-[#1c201e]  bg-transparent focus:outline-none px-2"
               type="email"
@@ -80,6 +86,7 @@ const AddData = ({ platform, onDataAdded }) => {
           <div>
             <input
               required
+              placeholder="Password"
               className="border-2 border-[#1c201e] bg-transparent focus:outline-none px-2"
               type="password"
               value={password}
