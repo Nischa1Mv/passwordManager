@@ -51,6 +51,8 @@ const AddData = ({ platform, onDataAdded }) => {
           {" "}
           Add Your Details
         </div>
+        <div className="flex gap-4  justify-center items-center">
+        <div>Username</div>
         <input
           required
           className="border-2 border-[#1c201e]  bg-transparent focus:outline-none px-2"
@@ -60,6 +62,7 @@ const AddData = ({ platform, onDataAdded }) => {
             setUsername(event.target.value);
           }}
         />
+        </div>
         <div className="flex gap-4   ">
           <div>Email</div>
           <div>
