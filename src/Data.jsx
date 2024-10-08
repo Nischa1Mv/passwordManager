@@ -8,7 +8,7 @@ const Data = (email) => {
   return (
     <>
       <div className="flex-col flex ">
-        <div className="flex items-center">Username /Nickname</div>
+        <div className="flex items-center text-md ">Username <span className="ml-2  flex justify-center items-center font-amsterdam"> {value[2]} </span></div>
         <div className="flex gap-4 mt-2 ">
           <div className="flex gap-2   ">
             <div>Email</div>

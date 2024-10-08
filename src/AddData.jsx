@@ -7,6 +7,7 @@ const db = getFirestore();
 const AddData = ({ platform, onDataAdded }) => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [error, setError] = useState("");
 
   //saving data to firestore
@@ -25,15 +26,16 @@ const AddData = ({ platform, onDataAdded }) => {
       await addDoc(credentialsCollectionRef, {
         platform,
         email,
+        username,
         password: encryptedPassword,
         createdAt: new Date(),
         updatedAt: new Date(),
       });
 
+      setError("Account is Added");
       setTimeout(() => {
-        setError("Account is Added");
+        setError("");
       }, 500);
-      setError("");
 
       onDataAdded();
       setEmail("");
@@ -42,7 +44,6 @@ const AddData = ({ platform, onDataAdded }) => {
       console.error("Error saving data:", error);
     }
   };
-
   return (
     <>
       <div className="flex flex-col gap-5 ">
@@ -50,6 +51,15 @@ const AddData = ({ platform, onDataAdded }) => {
           {" "}
           Add Your Details
         </div>
+        <input
+          required
+          className="border-2 border-[#1c201e]  bg-transparent focus:outline-none px-2"
+          type="text"
+          value={username}
+          onChange={(event) => {
+            setUsername(event.target.value);
+          }}
+        />
         <div className="flex gap-4   ">
           <div>Email</div>
           <div>
@@ -89,7 +99,9 @@ const AddData = ({ platform, onDataAdded }) => {
             </svg>
           </div>
         </div>
-        <div className="flex justify-center items-center text-yellow-300">{error}</div>
+        <div className="flex justify-center items-center text-yellow-300">
+          {error}
+        </div>
       </div>
     </>
   );

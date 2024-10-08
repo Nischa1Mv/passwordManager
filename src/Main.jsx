@@ -16,21 +16,25 @@ function Main() {
   const [error, setError] = useState(null); // Add error state for better UX
 
   const fetchData = async () => {
-    setLoading(true); // Start loading
-    setError(null); // Reset error
+    setLoading(true);
+    setError(null);
     try {
       const querySnapshot = await getDocs(
         collection(db, `users/${user}/${platform}`)
       );
       if (querySnapshot.empty) {
         setData([]);
-        setLoading(false); // Stop loading
+        setLoading(false);
         return;
       }
       const account = querySnapshot.docs.map((doc) => {
         const docData = doc.data();
         const password = decryptPassword(docData.password);
-        return { email: docData.email, password: password };
+        return {
+          email: docData.email,
+          password: password,
+          username: docData.username,
+        };
       });
       setData(account);
     } catch (error) {
@@ -101,7 +105,7 @@ function Main() {
           <div>
             {!loading &&
               data.map((item, index) => (
-                <Data key={index} email={item.email} password={item.password} />
+                <Data key={index} email={item.email} password={item.password} username={item.username} />
               ))}
           </div>
         </div>
