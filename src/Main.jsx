@@ -73,13 +73,14 @@ function Main() {
           />
         </div>
 
-        <div className="flex-col w-[60%] h-full overflow-y-auto border-2 border-[#1c201e] flex items-center py-4 gap-4">
-          <div className="flex justify-center items-center text-4xl font-amsterdam mb-5">
+        <div className="flex-col w-[60%]  overflow-y-auto border-2 border-[#1c201e] flex items-center py-4 ">
+          <div className="flex justify-center items-center text-4xl font-amsterdam mb-8">
             Your Accounts
           </div>{" "}
-          <div className="flex justify-center items-center mb-4">
+          <div className="flex justify-center items-center ">
             <AddData platform={platform} onDataAdded={handleDataAdded} />
           </div>
+          <hr class="w-52 h-1  bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700"></hr>
           {/* Display loading message or spinner */}
           {loading && (
             <div className="bg-white text-black font-bold px-2">
