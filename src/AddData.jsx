@@ -7,6 +7,7 @@ const db = getFirestore();
 const AddData = ({ platform, onDataAdded }) => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
 
   //saving data to firestore
   const handleSave = async (event) => {
@@ -29,7 +30,11 @@ const AddData = ({ platform, onDataAdded }) => {
         updatedAt: new Date(),
       });
 
-      console.log("Data saved successfully!");
+      setTimeout(() => {
+        setError("Account is Added");
+      }, 500);
+      setError("");
+
       onDataAdded();
       setEmail("");
       setPassword("");
@@ -84,6 +89,7 @@ const AddData = ({ platform, onDataAdded }) => {
             </svg>
           </div>
         </div>
+        <div className="flex justify-center items-center text-yellow-300">{error}</div>
       </div>
     </>
   );

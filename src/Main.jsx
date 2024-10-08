@@ -80,7 +80,7 @@ function Main() {
           <div className="flex justify-center items-center ">
             <AddData platform={platform} onDataAdded={handleDataAdded} />
           </div>
-          <hr class="w-52 h-1  bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700"></hr>
+          <hr class="w-52 h-1 bg-[#FBFAF2] border-0 rounded-xl md:my-10 "></hr>
           {/* Display loading message or spinner */}
           {loading && (
             <div className="bg-white text-black font-bold px-2">
