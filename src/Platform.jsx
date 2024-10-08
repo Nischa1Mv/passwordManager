@@ -16,9 +16,11 @@ function Platform({ setPlatform, name, platform }) {
     <>
       {" "}
       <div
-        className={` rounded-md w-full flex gap-4 px-2 py-1 border-[#1c201e] hover:bg-[#8f8c8c] cursor-pointer font-roboto text-[#555454] hover:text-[#ffff] ${
-          platform == name && "bg-white hover:bg-white hover:text-[#555454]"
-        } `}
+        className={`rounded-md w-full flex gap-4 px-2 py-1 border-[#1c201e] cursor-pointer font-roboto text-[#555454] ${
+          platform === name
+            ? "bg-white text-[#555454]"
+            : "hover:bg-[#8f8c8c] hover:text-[#ffff]"
+        }`}
         onClick={() => {
           choosePlatform();
         }}

@@ -10,7 +10,7 @@ const db = getFirestore();
 
 function Main() {
   const user = auth.currentUser.uid;
-  const [platform, setPlatform] = useState("steam");
+  const [platform, setPlatform] = useState("Steam");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false); // Add loading state
   const [error, setError] = useState(null); // Add error state for better UX
