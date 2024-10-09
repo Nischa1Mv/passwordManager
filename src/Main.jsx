@@ -19,7 +19,10 @@ import { decryptPassword } from "./Cypher";
 const db = getFirestore();
 
 function Main() {
-  const user = auth.currentUser.uid;
+  useEffect(() => {
+    fetchPlatform();
+  }, []);
+
   const [platform, setPlatform] = useState([]);
   const [selectedPlatform, setSelectedPlatform] = useState(null);
   const [data, setData] = useState([]);
@@ -30,29 +33,25 @@ function Main() {
   const [adddetails, setAddDetails] = useState(false);
   const [addPlatform, setAddPlatform] = useState(false);
 
+  const userId = auth.currentUser.uid;
   const fetchPlatform = async () => {
     setLoading(true);
-    setError(null);
-    try {
-      const userRef = doc(db, "users", user);
-      const userSnap = await getDoc(userRef);
+    setPError(null);
 
-      if (userSnap.exists()) {
-        const userData = userSnap.data();
-        setPlatform(Object.keys(userData));
-      } else {
-        console.log("No data found");
-        setPError("No data found");
-      }
+    const platformRef = collection(db, "users", userId, "platforms");
+    try {
+      const querySnapshot = await getDocs(platformRef);
+      const platformData = querySnapshot.docs.map((doc) => {
+        console.log(doc.id);
+        return doc.id;
+      });
+      setPlatform(platformData);
     } catch (error) {
       setError("Error fetching data. Please try again.");
     } finally {
       setLoading(false);
     }
   };
-  useEffect(() => {
-    fetchPlatform();
-  }, []);
 
   const onPlatformAdded = () => {
     fetchPlatform();
@@ -170,10 +169,10 @@ function Main() {
             ) : error ? (
               <div className="text-red-600">{Perror}</div>
             ) : platform.length > 0 ? (
-              platform.map((platformName, index) => (
+              platform.map((platform, index) => (
                 <Platform
                   key={index}
-                  platform={platformName}
+                  platform={platform}
                   setPlatform={setSelectedPlatform}
                   deletePlatform={deletePlatform}
                 />

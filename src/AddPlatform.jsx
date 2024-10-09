@@ -1,18 +1,21 @@
 import React, { useState } from "react";
-import {} from "firebase/firestore";
 import {
   getFirestore,
   doc,
   getDoc,
   setDoc,
   updateDoc,
+  arrayUnion,
 } from "firebase/firestore";
 import { auth } from "./auth/firebase";
+
 const db = getFirestore();
 
 function AddPlatform({ onPlatformAdded }) {
   const [platform, setPlatform] = useState("");
   const [error, setError] = useState("");
+
+  // Acknowledge when platform is added successfully
   function platformCreatedACK() {
     setError("Platform is Added");
     setTimeout(() => {
@@ -29,41 +32,37 @@ function AddPlatform({ onPlatformAdded }) {
       }, 1000);
       return;
     }
+
     const userId = auth.currentUser.uid;
-    const userRef = doc(db, "users", userId);
+    const platformRef = doc(db, "users", userId, "platforms", platform);
 
     try {
-      const userSnap = await getDoc(userRef);
+      const userSnap = await getDoc(platformRef);
 
-      if (userSnap.exists()) {
-        const existingData = userSnap.data();
-        if (!existingData[platform]) {
-          await updateDoc(userRef, { [platform]: { accounts: {} } });
-          console.log(`Platform ${platform} added for user ${userId}`);
-          platformCreatedACK();
-        } else {
-          console.log(`Platform ${platform} already exists for user ${userId}`);
-        }
-      } else {
-        await setDoc(userRef, { [platform]: { accounts: {} } });
-        platformCreatedACK();
+      if (!userSnap.exists()) {
+        await setDoc(platformRef, {});
+
         console.log(`Platform ${platform} added for user ${userId}`);
+        platformCreatedACK();
+      } else {
+        console.log(`Platform ${platform} already exists for user ${userId}`);
       }
 
       if (onPlatformAdded) {
-        onPlatformAdded(); // Trigger re-fetch
+        onPlatformAdded();
       }
     } catch (error) {
       setError("Error saving data");
       console.error("Error saving data", error);
     }
   };
+
   return (
     <>
       <span className="bg-red-600 px-2 text-sm font-medium ">{error}</span>
-      <div className="flex  gap-4 mb-4">
+      <div className="flex gap-4 mb-4">
         <input
-          className="focus:outline-none bg-transparent border-2 border-[#1c201e] px-2  "
+          className="focus:outline-none bg-transparent border-2 border-[#1c201e] px-2"
           type="text"
           placeholder="Platform Name"
           onChange={(event) => {
