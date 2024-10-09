@@ -10,6 +10,8 @@ import {
   getFirestore,
   deleteDoc,
   getDoc,
+  updateDoc,
+  deleteField,
 } from "firebase/firestore";
 import { auth } from "./auth/firebase";
 import { decryptPassword } from "./Cypher";
@@ -22,6 +24,8 @@ function Main() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [Derror, setDError] = useState(null);
+
   const [adddetails, setAddDetails] = useState(false);
   const [addPlatform, setAddPlatform] = useState(false);
 
@@ -92,31 +96,35 @@ function Main() {
   // };
 
   // // delete data from the database
-  // const deleteData = async (email) => {
-  //   try {
-  //     setError(null);
-  //     setLoading(true);
-  //     const querySnapshot = await getDocs(
-  //       collection(db, `users/${user}/${platform}`)
-  //     );
+  const deletePlatform = async (platform) => {
+    try {
+      setError(null);
+      setLoading(true);
 
-  //     const docId = querySnapshot.docs.find(
-  //       (doc) => doc.data().email === email
-  //     );
+      const platformCollectionRef = collection(db, `users/${user}/${platform}`);
 
-  //     if (docId) {
-  //       await deleteDoc(docId.ref);
-  //       setError("Account deleted successfully");
-  //       handleDataAdded();
-  //     }
-  //   } catch (error) {
-  //     setError("Error deleting data. Please try again.");
-  //   } finally {
-  //     setTimeout(() => {
-  //       setLoading(false);
-  //     }, 500);
-  //   }
-  // };
+      const platformDocs = await getDocs(platformCollectionRef);
+
+      const deletePromises = platformDocs.docs.map((doc) => deleteDoc(doc.ref));
+      await Promise.all(deletePromises);
+
+      const userRef = doc(db, "users", user);
+
+      await updateDoc(userRef, {
+        [platform]: deleteField(),
+      });
+
+      setError("Platform deleted successfully");
+      fetchPlatform();
+    } catch (error) {
+      setError("Error deleting platform. Please try again.");
+      console.error("Error deleting platform:", error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
+    }
+  };
 
   return (
     <>
@@ -151,31 +159,22 @@ function Main() {
               <AddPlatform onPlatformAdded={onPlatformAdded} />
             </>
           )}
-          {/* <Platform
-            setPlatform={setPlatform}
-            platform={platform}
-            name="Steam"
-          />
-          <Platform
-            setPlatform={setPlatform}
-            platform={platform}
-            name="Github"
-          />
-          <Platform
-            setPlatform={setPlatform}
-            platform={platform}
-            name="Google"
-          /> */}
-          {/* Loading indicator */}
-          {loading && <div>Loading platforms...</div>}
-          {/* Error handling */}
-          {error && <div className="text-red-600">{error}</div>}
+          <hr class="w-52 h-1 bg-[#FBFAF2] border-0 rounded-xl mt-4 mb-6 "></hr>
           <div className="flex flex-col items-center gap-2">
-            {platform.length > 0 ? (
-              platform.map((platform, index) => (
-                <div key={index} className="text-xl font-semibold">
-                  {platform}
-                </div>
+            {/* Display platforms */}
+            {loading ? (
+              <div>Loading platforms...</div>
+            ) : error ? (
+              <div className="text-red-600">{error}</div>
+            ) : platform.length > 0 ? (
+              platform.map((platformName, index) => (
+                <Platform
+                  key={index}
+                  name={platformName}
+                  platform={platformName}
+                  setPlatform={setPlatform}
+                  deletePlatform={deletePlatform}
+                />
               ))
             ) : (
               <div>No platforms available</div>
