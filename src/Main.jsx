@@ -24,7 +24,7 @@ function Main() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [Derror, setDError] = useState(null);
+  const [Perror, setPError] = useState(null);
 
   const [adddetails, setAddDetails] = useState(false);
   const [addPlatform, setAddPlatform] = useState(false);
@@ -41,7 +41,7 @@ function Main() {
         setPlatform(Object.keys(userData));
       } else {
         console.log("No data found");
-        setError("No data found");
+        setPError("No data found");
       }
     } catch (error) {
       setError("Error fetching data. Please try again.");
@@ -98,7 +98,7 @@ function Main() {
   // // delete data from the database
   const deletePlatform = async (platform) => {
     try {
-      setError(null);
+      setPError(null);
       setLoading(true);
 
       const platformCollectionRef = collection(db, `users/${user}/${platform}`);
@@ -114,10 +114,10 @@ function Main() {
         [platform]: deleteField(),
       });
 
-      setError("Platform deleted successfully");
+      setPError("Platform deleted successfully");
       fetchPlatform();
     } catch (error) {
-      setError("Error deleting platform. Please try again.");
+      setPError("Error deleting platform. Please try again.");
       console.error("Error deleting platform:", error);
     } finally {
       setTimeout(() => {
@@ -160,12 +160,14 @@ function Main() {
             </>
           )}
           <hr class="w-52 h-1 bg-[#FBFAF2] border-0 rounded-xl mt-4 mb-6 "></hr>
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex w-full  flex-col items-center gap-2">
             {/* Display platforms */}
             {loading ? (
-              <div>Loading platforms...</div>
+              <div className="bg-white text-black font-bold px-2">
+                Loading platforms...
+              </div>
             ) : error ? (
-              <div className="text-red-600">{error}</div>
+              <div className="text-red-600">{Perror}</div>
             ) : platform.length > 0 ? (
               platform.map((platformName, index) => (
                 <Platform
@@ -177,7 +179,9 @@ function Main() {
                 />
               ))
             ) : (
-              <div>No platforms available</div>
+              <div className="bg-white text-black font-bold px-2">
+                No platforms available
+              </div>
             )}
           </div>
         </div>
