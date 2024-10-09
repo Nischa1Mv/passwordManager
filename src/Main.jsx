@@ -21,6 +21,7 @@ const db = getFirestore();
 function Main() {
   const user = auth.currentUser.uid;
   const [platform, setPlatform] = useState([]);
+  const [selectedPlatform, setSelectedPlatform] = useState(null);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -172,9 +173,8 @@ function Main() {
               platform.map((platformName, index) => (
                 <Platform
                   key={index}
-                  name={platformName}
                   platform={platformName}
-                  setPlatform={setPlatform}
+                  setPlatform={setSelectedPlatform}
                   deletePlatform={deletePlatform}
                 />
               ))
