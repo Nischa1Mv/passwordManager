@@ -1,13 +1,7 @@
 import React from "react";
 // import image from "./steam.png";
 
-function Platform({
-  deletePlatform,
-  setPlatform,
-  name,
-  platform,
-  accountCount = 0,
-}) {
+function Platform({ deletePlatform, setPlatform, platform, accountCount = 0 }) {
   // const platformImages = {
   //   steam: "./steam.png",
   //   github: "./github.png",
@@ -15,7 +9,7 @@ function Platform({
   // };
 
   const choosePlatform = () => {
-    setPlatform(name);
+    setPlatform(platform);
   };
 
   return (
@@ -24,7 +18,7 @@ function Platform({
         {" "}
         <div
           className={`rounded-md    flex gap-4 px-2 py-1 border-[#1c201e] cursor-pointer font-roboto text-[#555454] ${
-            platform === name
+            platform === platform
               ? "  text-[#555454]"
               : "hover:bg-[#8f8c8c] hover:text-[#ffff]"
           }`}
@@ -45,7 +39,7 @@ function Platform({
             {/* <img src={image} width="28" /> */}
             {/* <img src={platformImages[name]} width="28" alt={`${name} logo`} /> */}
           </div>
-          <div className="font-bold text-lg">{name}</div>
+          <div className="font-bold text-lg">{platform}</div>
           <div className="flex-1"></div>
           <div
             className="flex justify-center items-center"
