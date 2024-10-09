@@ -20,12 +20,12 @@ function Platform({
 
   return (
     <>
-      <div className="flex gap-4">
+      <div className="flex gap-4 border rounded  w-full py-1 bg-white px-5">
         {" "}
         <div
-          className={`rounded-md w-full flex gap-4 px-2 py-1 border-[#1c201e] cursor-pointer font-roboto text-[#555454] ${
+          className={`rounded-md    flex gap-4 px-2 py-1 border-[#1c201e] cursor-pointer font-roboto text-[#555454] ${
             platform === name
-              ? "bg-white text-[#555454]"
+              ? "  text-[#555454]"
               : "hover:bg-[#8f8c8c] hover:text-[#ffff]"
           }`}
           onClick={() => {
@@ -47,23 +47,24 @@ function Platform({
           </div>
           <div className="font-bold text-lg">{name}</div>
           <div className="flex-1"></div>
-          <div className="rounded-full border border-[#2b312e]  px-2 flex justify-center items-center">
-            {accountCount}
+          <div
+            className="flex justify-center items-center"
+            onClick={() => deletePlatform(platform)}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="22px"
+              fill="#00000"
+            >
+              <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+            </svg>
           </div>
         </div>
-        <div
-          className="flex justify-center items-center"
-          onClick={() => deletePlatform(platform)}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="24px"
-            viewBox="0 -960 960 960"
-            width="24px"
-            fill="#e8eaed"
-          >
-            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
-          </svg>
+        <div className="flex-1"></div>
+        <div className="text-2xl underline border-[#2b312e] text-black  px-2 flex justify-center items-center">
+          {accountCount}
         </div>
       </div>
     </>
