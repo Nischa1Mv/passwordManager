@@ -104,13 +104,16 @@ function Main() {
 
       const platformCollectionRef = collection(
         db,
-        `users/${userId}/${platform}`
+        `users/${userId}/platforms/${platform}/accounts`
       );
 
       const platformDocs = await getDocs(platformCollectionRef);
 
       const deletePromises = platformDocs.docs.map((doc) => deleteDoc(doc.ref));
       await Promise.all(deletePromises);
+
+      const platformRef = doc(db, `users/${userId}/platforms/${platform}`);
+      await deleteDoc(platformRef);
 
       const userRef = doc(db, "users", userId);
 
@@ -129,6 +132,7 @@ function Main() {
       }, 500);
     }
   };
+
   const deleteData = async (username) => {};
 
   return (
