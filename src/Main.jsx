@@ -20,14 +20,11 @@ const db = getFirestore();
 const user = auth.currentUser;
 
 function Main() {
-  useEffect(() => {
-    fetchPlatform();
-  }, []);
-
   const [platform, setPlatform] = useState([]);
   const [selectedPlatform, setSelectedPlatform] = useState(null);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [ploading, setPloading] = useState(false);
   const [error, setError] = useState(null);
   const [Perror, setPError] = useState(null);
 
@@ -35,22 +32,26 @@ function Main() {
   const [addPlatform, setAddPlatform] = useState(false);
 
   const userId = auth.currentUser.uid;
+
   const fetchPlatform = async () => {
-    setLoading(true);
+    setPloading(true);
     setPError(null);
 
     const platformRef = collection(db, "users", userId, "platforms");
     try {
       const querySnapshot = await getDocs(platformRef);
       const platformData = querySnapshot.docs.map((doc) => {
-        console.log(doc.id);
         return doc.id;
       });
+      if (!selectedPlatform && platformData.length > 0) {
+        // console.log("selected platform , platformData[0]);
+        setSelectedPlatform(platformData[0]);
+      }
       setPlatform(platformData);
     } catch (error) {
       setError("Error fetching data. Please try again.");
     } finally {
-      setLoading(false);
+      setPloading(false);
     }
   };
 
@@ -91,16 +92,16 @@ function Main() {
     fetchData();
   }, [selectedPlatform, user]);
 
-  // // Pass this function to AddData to trigger re-fetch
-  // const handleDataAdded = () => {
-  //   fetchData();
-  // };
+  // Pass this function to AddData to trigger re-fetch
+  const handleDataAdded = () => {
+    fetchData();
+  };
 
   // // delete data from the database
   const deletePlatform = async (platform) => {
     try {
       setPError(null);
-      setLoading(true);
+      setPloading(true);
 
       const platformCollectionRef = collection(
         db,
@@ -128,10 +129,13 @@ function Main() {
       console.error("Error deleting platform:", error);
     } finally {
       setTimeout(() => {
-        setLoading(false);
+        setPloading(false);
       }, 500);
     }
   };
+  useEffect(() => {
+    fetchPlatform();
+  }, []);
 
   const deleteData = async (username) => {};
 
@@ -171,7 +175,7 @@ function Main() {
           <hr class="w-52 h-1 bg-[#FBFAF2] border-0 rounded-xl mt-4 mb-6 "></hr>
           <div className="flex w-full  flex-col items-center gap-2">
             {/* Display platforms */}
-            {loading ? (
+            {ploading ? (
               <div className="bg-white text-black font-bold px-2">
                 Loading platforms...
               </div>
