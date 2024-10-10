@@ -1,7 +1,13 @@
 import React from "react";
 // import image from "./steam.png";
 
-function Platform({ deletePlatform, setPlatform, platform, accountCount = 0 }) {
+function Platform({
+  deletePlatform,
+  setPlatform,
+  name,
+  platform,
+  accountCount = 0,
+}) {
   // const platformImages = {
   //   steam: "./steam.png",
   //   github: "./github.png",
@@ -9,22 +15,21 @@ function Platform({ deletePlatform, setPlatform, platform, accountCount = 0 }) {
   // };
 
   const choosePlatform = () => {
-    setPlatform(platform);
+    setPlatform(name);
+    console.log(name, "is selected");
   };
 
   return (
     <>
-      <div className="flex gap-4 border rounded  w-full py-1 bg-white px-5">
+      <div
+        className={`flex gap-4 border rounded w-full py-1 px-5 platformData hover:bg-gray-300 text-white 
+      ${name === platform ? "bg-yellow-300 text-black" : "bg-gray-800"}`} // Highlight selected platform
+        onClick={choosePlatform}
+      >
         {" "}
         <div
-          className={`rounded-md    flex gap-4 px-2 py-1 border-[#1c201e] cursor-pointer font-roboto text-[#555454] ${
-            platform === platform
-              ? "  text-[#555454]"
-              : "hover:bg-[#8f8c8c] hover:text-[#ffff]"
-          }`}
-          onClick={() => {
-            choosePlatform();
-          }}
+          className={`rounded-md    flex gap-4 px-2 py-1 border-[#1c201e] cursor-pointer font-roboto text-[#555454]           
+          `}
         >
           <div className="flex justify-center items-center">
             <svg
@@ -43,7 +48,10 @@ function Platform({ deletePlatform, setPlatform, platform, accountCount = 0 }) {
           <div className="flex-1"></div>
           <div
             className="flex justify-center items-center"
-            onClick={() => deletePlatform(platform)}
+            onClick={(e) => {
+              e.stopPropagation();
+              deletePlatform(platform);
+            }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

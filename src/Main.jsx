@@ -17,6 +17,7 @@ import { auth } from "./auth/firebase";
 import { decryptPassword } from "./Cypher";
 
 const db = getFirestore();
+const user = auth.currentUser;
 
 function Main() {
   useEffect(() => {
@@ -56,39 +57,39 @@ function Main() {
   const onPlatformAdded = () => {
     fetchPlatform();
   };
+  // fetching the accounts form the database
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const querySnapshot = await getDocs(
+        collection(db, `users/${userId}/platforms/${selectedPlatform}/accounts`)
+      );
+      if (querySnapshot.empty) {
+        setData([]);
+        setLoading(false);
+        return;
+      }
+      const account = querySnapshot.docs.map((doc) => {
+        const docData = doc.data();
+        const password = decryptPassword(docData.password);
+        return {
+          email: docData.email,
+          password: password,
+          username: docData.username,
+        };
+      });
+      setData(account);
+    } catch (error) {
+      setError("Error fetching data. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  // const fetchData = async () => {
-  //   setLoading(true);
-  //   setError(null);
-  //   try {
-  //     const querySnapshot = await getDocs(
-  //       collection(db, `users/${user}/${platform}`)
-  //     );
-  //     if (querySnapshot.empty) {
-  //       setData([]);
-  //       setLoading(false);
-  //       return;
-  //     }
-  //     const account = querySnapshot.docs.map((doc) => {
-  //       const docData = doc.data();
-  //       const password = decryptPassword(docData.password);
-  //       return {
-  //         email: docData.email,
-  //         password: password,
-  //         username: docData.username,
-  //       };
-  //     });
-  //     setData(account);
-  //   } catch (error) {
-  //     setError("Error fetching data. Please try again.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   // fetchData();
-  // }, [platform, user]);
+  useEffect(() => {
+    fetchData();
+  }, [selectedPlatform, user]);
 
   // // Pass this function to AddData to trigger re-fetch
   // const handleDataAdded = () => {
@@ -101,14 +102,17 @@ function Main() {
       setPError(null);
       setLoading(true);
 
-      const platformCollectionRef = collection(db, `users/${user}/${platform}`);
+      const platformCollectionRef = collection(
+        db,
+        `users/${userId}/${platform}`
+      );
 
       const platformDocs = await getDocs(platformCollectionRef);
 
       const deletePromises = platformDocs.docs.map((doc) => deleteDoc(doc.ref));
       await Promise.all(deletePromises);
 
-      const userRef = doc(db, "users", user);
+      const userRef = doc(db, "users", userId);
 
       await updateDoc(userRef, {
         [platform]: deleteField(),
@@ -125,6 +129,7 @@ function Main() {
       }, 500);
     }
   };
+  const deleteData = async (username) => {};
 
   return (
     <>
@@ -172,6 +177,7 @@ function Main() {
               platform.map((platform, index) => (
                 <Platform
                   key={index}
+                  name={platform}
                   platform={platform}
                   setPlatform={setSelectedPlatform}
                   deletePlatform={deletePlatform}
@@ -210,19 +216,19 @@ function Main() {
               <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
             </svg>
           </div>
-          {/* {adddetails && (
+          {adddetails && (
             <>
               {" "}
               <div className="flex justify-center items-center  ">
                 <AddData
-                  platform={platform}
+                  platform={selectedPlatform}
                   onDataAdded={handleDataAdded}
                   setAdddetails={setAddDetails}
                   addDetails={adddetails}
                 />
               </div>
             </>
-          )} */}
+          )}
           <hr class="w-52 h-1 bg-[#FBFAF2] border-0 rounded-xl mt-4 mb-6 "></hr>
           {/* Display loading message or spinner */}
           {loading && (
@@ -241,7 +247,7 @@ function Main() {
             </div>
           )}
           {/* Display Data */}
-          {/* <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4">
             {!loading &&
               data.map((item, index) => (
                 <Data
@@ -252,7 +258,7 @@ function Main() {
                   username={item.username}
                 />
               ))}
-          </div> */}
+          </div>
         </div>
       </div>
     </>
