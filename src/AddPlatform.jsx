@@ -41,7 +41,6 @@ function AddPlatform({ onPlatformAdded }) {
 
       if (!userSnap.exists()) {
         await setDoc(platformRef, {});
-
         console.log(`Platform ${platform} added for user ${userId}`);
         platformCreatedACK();
       } else {
