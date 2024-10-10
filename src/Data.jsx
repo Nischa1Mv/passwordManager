@@ -17,7 +17,7 @@ const Data = ({ email, password, username, deleteData }) => {
           <span className="ml-4">
             <svg
               onClick={() => {
-                deleteData(email);
+                deleteData(username);
               }}
               className="cursor-pointer"
               xmlns="http://www.w3.org/2000/svg"

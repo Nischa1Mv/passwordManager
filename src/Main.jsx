@@ -137,7 +137,24 @@ function Main() {
     fetchPlatform();
   }, []);
 
-  const deleteData = async (username) => {};
+  const deleteData = async (username) => {
+    try {
+      setError(null);
+      setLoading(true);
+
+      const userUsernameRef = doc(
+        db,
+        `users/${userId}/platforms/${selectedPlatform}/accounts/${username}`
+      );
+
+      await deleteDoc(userUsernameRef);
+      fetchData();
+    } catch (error) {
+      setError("Error deleting data. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
