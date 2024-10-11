@@ -3,12 +3,13 @@
 @tailwind utilities;
 
 .platformData {
-  background: hwb(0 100% 0% / 0.425);
+  background: #c7c7c7;
+  /* #dac343 */
   box-shadow: 0 8px 32px 0 rgba(94, 94, 94, 0.37);
   backdrop-filter: blur(0.5px);
   -webkit-backdrop-filter: blur(0.5px);
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 215, 0, 0.5);
 }
 .bg-color {
   background: rgb(0, 16, 41);

@@ -38,7 +38,9 @@ function Home() {
   return (
     <>
       <div className=" text-white  w-full h-screen flex flex-col  pt-10 items-center gap-4 relative px-4 py-4">
-        <div className="text-5xl  font-amsterdam">Password Manager</div>
+        <div className="text-5xl  text-[#00f0ff]  font-amsterdam">
+          Password Manager
+        </div>
         {isUser ? (
           <>
             <button

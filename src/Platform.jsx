@@ -22,15 +22,13 @@ function Platform({
   return (
     <>
       <div
-        className={`flex gap-4 border rounded w-full py-1 px-5 platformData hover:bg-gray-300 text-white 
-      ${name === platform ? "bg-yellow-300 text-black" : "bg-gray-800"}`} // Highlight selected platform
+        className={`flex gap-4 border rounded w-full py-1 px-5 platformData hover:bg-[#dac343] cursor-pointer text-black
+  ${name === platform ? "bg-[#dac343]" : ""}
+`}
         onClick={choosePlatform}
       >
         {" "}
-        <div
-          className={`rounded-md    flex gap-4 px-2 py-1 border-[#1c201e] cursor-pointer font-roboto text-[#555454]           
-          `}
-        >
+        <div className="flex gap-4 px-2 py-1 cursor-pointer font-roboto text-lg items-center">
           <div className="flex justify-center items-center">
             <svg
               className="rounded-full"

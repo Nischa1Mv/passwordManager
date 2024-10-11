@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  getFirestore,
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc,
-  arrayUnion,
-} from "firebase/firestore";
+import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 import { auth } from "./auth/firebase";
 
 const db = getFirestore();
