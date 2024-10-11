@@ -163,26 +163,28 @@ function Main() {
           <div className="flex justify-center items-center text-4xl font-amsterdam mb-5">
             Platforms
           </div>{" "}
-          <div className="flex gap-4">
-            <div className="w-full text-2xl font-amsterdam flex justify-center items-center mb-2">
+          <div className="flex gap-4 justify-center items-center">
+            <div className="w-full text-[#60faad] text-2xl font-amsterdam flex justify-center items-center mb-2">
               {" "}
               Add Platform
             </div>
-            <svg
-              onClick={() => {
-                setAddPlatform(!addPlatform);
-              }}
-              className={`transform transition-transform duration-300 ${
-                addPlatform ? "rotate-45" : "rotate-0"
-              }`}
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#e8eaed"
-            >
-              <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
-            </svg>
+            <div className="mb-2">
+              <svg
+                onClick={() => {
+                  setAddPlatform(!addPlatform);
+                }}
+                className={`transform transition-transform duration-300 ${
+                  addPlatform ? "rotate-45" : "rotate-0"
+                }`}
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 -960 960 960"
+                width="24px"
+                fill="#2cff96"
+              >
+                <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
+              </svg>
+            </div>
           </div>
           {addPlatform && (
             <>
@@ -217,29 +219,31 @@ function Main() {
         </div>
 
         <div className="flex-col w-[60%]  overflow-y-auto border-2 border-[#1c201e] flex items-center py-4 ">
-          <div className="flex justify-center items-center text-4xl font-amsterdam mb-5">
+          <div className="flex justify-center    items-center text-4xl font-amsterdam mb-5">
             Your Accounts
           </div>{" "}
-          <div className="flex gap-4">
-            <div className="w-full text-2xl font-amsterdam flex justify-center items-center mb-2">
+          <div className="flex gap-4 justify-center items-center">
+            <div className="w-full text-2xl  text-[#60faad] font-amsterdam flex justify-center items-center mb-2">
               {" "}
               Add Your Details
             </div>
-            <svg
-              onClick={() => {
-                setAddDetails(!adddetails);
-              }}
-              className={`transform transition-transform duration-300 ${
-                adddetails ? "rotate-45" : "rotate-0"
-              }`}
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#e8eaed"
-            >
-              <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
-            </svg>
+            <div className="mb-3">
+              <svg
+                onClick={() => {
+                  setAddDetails(!adddetails);
+                }}
+                className={`transform transition-transform duration-300  ${
+                  adddetails ? "rotate-45" : "rotate-0"
+                }`}
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 -960 960 960"
+                width="24px"
+                fill="#2cff96"
+              >
+                <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
+              </svg>
+            </div>
           </div>
           {adddetails && (
             <>

@@ -6,6 +6,7 @@ module.exports = {
       fontFamily: {
         amsterdam: ['"New Amsterdam"', "sans-serif"],
         roboto: ["Roboto", "sans-serif"],
+        protestStrike: ['"Protest Strike"', "sans-serif"],
       },
       keyframes: {
         slideUp: {

@@ -3,10 +3,29 @@
 @tailwind utilities;
 
 .platformData {
-  background: rgba(247, 242, 242, 0.15);
+  background: hwb(0 100% 0% / 0.425);
   box-shadow: 0 8px 32px 0 rgba(94, 94, 94, 0.37);
   backdrop-filter: blur(0.5px);
   -webkit-backdrop-filter: blur(0.5px);
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.18);
+}
+.bg-color {
+  background: rgb(0, 16, 41);
+
+  background: linear-gradient(110deg, rgb(0, 22, 56) 30%, rgb(34, 34, 34) 70%);
+
+  background: -moz-linear-gradient(
+    110deg,
+    rgb(0, 13, 32) 70%,
+    hsla(223, 58%, 5%) 30%
+  );
+
+  background: -webkit-linear-gradient(
+    110deg,
+    rgb(0, 24, 65) 40%,
+    hsl(223, 58%, 5%) 70%
+  );
+
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#000E23", endColorstr="#000000", GradientType=1 );
 }

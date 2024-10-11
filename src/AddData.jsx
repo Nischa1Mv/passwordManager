@@ -61,7 +61,7 @@ const AddData = ({ platform, onDataAdded, setAdddetails, addDetails }) => {
           <input
             placeholder="Username"
             required
-            className="border-2 border-[#1c201e] bg-transparent focus:outline-none px-2"
+            className="border-2  border-[#5c6b81] focus:border-[#73a8f8] bg-transparent focus:outline-none px-2"
             type="text"
             value={username}
             onChange={(event) => {
@@ -74,7 +74,7 @@ const AddData = ({ platform, onDataAdded, setAdddetails, addDetails }) => {
           <input
             placeholder="Email"
             required
-            className="border-2 border-[#1c201e] bg-transparent focus:outline-none px-2"
+            className="border-2 border-[#5c6b81] focus:border-[#73a8f8]  bg-transparent focus:outline-none px-2"
             type="email"
             value={email}
             onChange={(event) => {
@@ -85,7 +85,7 @@ const AddData = ({ platform, onDataAdded, setAdddetails, addDetails }) => {
           <input
             required
             placeholder="Password"
-            className="border-2 border-[#1c201e] bg-transparent focus:outline-none px-2"
+            className="border-2 border-[#5c6b81]  focus:border-[#73a8f8] bg-transparent focus:outline-none px-2"
             type="password"
             value={password}
             onChange={(event) => {
@@ -99,7 +99,7 @@ const AddData = ({ platform, onDataAdded, setAdddetails, addDetails }) => {
             height="24px"
             viewBox="0 -960 960 960"
             width="24px"
-            fill="#1F51FF"
+            fill="#4690ff"
           >
             <path d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160Zm-80 34L646-760H200v560h560v-446ZM480-240q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM240-560h360v-160H240v160Zm-40-86v446-560 114Z" />
           </svg>
