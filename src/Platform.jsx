@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 // import image from "./steam.png";
 
 function Platform({
@@ -15,7 +15,7 @@ function Platform({
   // };
 
   const choosePlatform = () => {
-    setPlatform(name);
+    setPlatform(platform);
     console.log(name, "is selected");
   };
 

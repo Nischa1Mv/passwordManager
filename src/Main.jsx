@@ -204,7 +204,7 @@ function Main() {
               platform.map((platform, index) => (
                 <Platform
                   key={index}
-                  name={platform}
+                  name={selectedPlatform}
                   platform={platform}
                   setPlatform={setSelectedPlatform}
                   deletePlatform={deletePlatform}
