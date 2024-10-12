@@ -110,7 +110,9 @@ function Login() {
     <>
       <div className=" w-screen h-screen text-white flex items-center justify-center">
         <form className="flex flex-col justify-center items-center gap-2">
-          <div className="text-3xl  font-amsterdam mb-3">Login </div>
+          <div className="text-4xl  font-amsterdam mb-3 text-[#60faad]">
+            Login{" "}
+          </div>
 
           <InputWithLabel
             label="Email"
@@ -149,7 +151,7 @@ function Login() {
           )}
 
           <button
-            className={`px-6 text- py-1 mt-2  border-2 rounded-xl transition-transform duration-200 cursor-pointer ${
+            className={`px-6 text- py-1 mt-2 text-[#00f0ff] border-2 rounded-xl transition-transform duration-200 cursor-pointer ${
               isLoading ? "opacity-50 cursor-not-allowed" : "hover:scale-105"
             }`}
             type="button"

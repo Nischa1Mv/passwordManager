@@ -88,7 +88,9 @@ function Signup() {
         className="flex flex-col justify-center items-center gap-2"
         onSubmit={AuthSignup}
       >
-        <div className="text-3xl font-amsterdam mb-3">Signup</div>
+        <div className="text-4xl font-amsterdam mb-3 text-[#60faad]">
+          Signup
+        </div>
 
         <InputWithLabel
           label="Email"
@@ -125,7 +127,7 @@ function Signup() {
             checked={isTermsAccepted}
             onChange={() => setIsTermsAccepted(!isTermsAccepted)}
           />
-          <p>I Agree to the Terms and Conditions</p>
+          <p>I agree to the Terms and Conditions</p>
         </div>
         {error && (
           <div className="flex flex-col justify-center items-center text-red-500">
@@ -133,17 +135,17 @@ function Signup() {
           </div>
         )}
         <button
-          className={`px-6 py-1 mt-2 border-2 rounded-xl transition-transform duration-200 cursor-pointer ${
+          className={`px-6 py-1 mt-2 text-[#00f0ff] border-2 rounded-xl transition-transform duration-200 cursor-pointer ${
             isLoading ? "opacity-50 " : "hover:scale-105"
           }`}
           type="submit"
           disabled={isLoading || !isTermsAccepted || !email || !password}
         >
-          {isLoading ? "Logging In..." : "Submit"}
+          {isLoading ? "Signing In..." : "Signup"}
         </button>
 
         <div>
-          Already have an account?{" "}
+          Already have an account ?{" "}
           <span
             className="text-amber-200 cursor-pointer mt-1"
             onClick={() => navigate("/login")}

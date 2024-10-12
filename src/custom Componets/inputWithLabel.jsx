@@ -43,7 +43,7 @@ function InputWithLabel({
       <input
         id={label}
         value={value}
-        className="border-2 border-[#1c201e] bg-transparent focus:outline-none px-2 w-[17vw] "
+        className="border-2 border-[#5c6b81]  focus:border-[#73a8f8] border-[#1c201e] bg-transparent focus:outline-none px-2 w-[17vw] "
         type={isPasswordVisible && !isEmailField ? "text" : type}
         onChange={onChange}
       />
