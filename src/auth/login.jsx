@@ -109,7 +109,10 @@ function Login() {
   return (
     <>
       <div className=" w-screen h-screen text-white flex items-center justify-center">
-        <form className="flex flex-col justify-center items-center gap-2">
+        <form
+          onSubmit={AuthLogin}
+          className="flex flex-col justify-center items-center gap-2"
+        >
           <div className="text-4xl  font-amsterdam mb-3 text-[#60faad]">
             Login{" "}
           </div>
@@ -154,8 +157,7 @@ function Login() {
             className={`px-6 text- py-1 mt-2 text-[#00f0ff] border-2 rounded-xl transition-transform duration-200 cursor-pointer ${
               isLoading ? "opacity-50 cursor-not-allowed" : "hover:scale-105"
             }`}
-            type="button"
-            onClick={AuthLogin}
+            type="submit"
             disabled={isLoading || !state.email || !state.password}
           >
             {isLoading ? "Logging In..." : "Login"}
