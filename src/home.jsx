@@ -9,6 +9,7 @@ function Home() {
   const navigate = useNavigate();
   const [isUser, setIsUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
@@ -41,25 +42,16 @@ function Home() {
         <div className="text-5xl  text-[#00f0ff]  font-amsterdam">
           Password Manager
         </div>
-        {isUser ? (
-          <>
-            <button
-              className="absolute top-2 right-4 border-2 px-2  rounded-xl  "
-              onClick={logOut}
-            >
-              logout
-            </button>
-          </>
-        ) : (
-          <>
-            {" "}
-            <button
-              className="absolute top-2 right-4 border-2 px-2 rounded-xl  "
-              onClick={() => navigate("/login")}
-            >
-              login
-            </button>
-          </>
+        {isUser && (
+          <button
+            className={` absolute top-7 right-7 border-[#b7f1d4] hover:text-[#050a14] hover:bg-[#00f0ff] hover:border-none font-bold px-4 text-lg text- py-1 text-[#00f0ff] border-2 rounded-xl transition-transform duration-200 cursor-pointer ${
+              isLoading ? "opacity-50 cursor-not-allowed " : "hover:scale-105  "
+            }`}
+            type="button"
+            onClick={logOut}
+          >
+            {isLoading ? "Loggout In..." : "Logout"}
+          </button>
         )}
 
         <div>
