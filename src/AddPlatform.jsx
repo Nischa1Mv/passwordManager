@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 import { auth } from "./auth/firebase";
 
@@ -7,13 +7,14 @@ const db = getFirestore();
 function AddPlatform({ onPlatformAdded }) {
   const [platform, setPlatform] = useState("");
   const [error, setError] = useState("");
+  const PlatformRef = useRef(null);
 
   // Acknowledge when platform is added successfully
   function platformCreatedACK() {
     setError("Platform is Added");
     setTimeout(() => {
       setError("");
-    }, 5000);
+    }, 3000);
   }
 
   const savePlatform = async (event) => {
@@ -22,7 +23,7 @@ function AddPlatform({ onPlatformAdded }) {
       setError("Please enter the platform name");
       setTimeout(() => {
         setError("");
-      }, 1000);
+      }, 1500);
       return;
     }
 
@@ -48,17 +49,29 @@ function AddPlatform({ onPlatformAdded }) {
       console.error("Error saving data", error);
     }
   };
+  const handleKeyDown = (e, ref) => {
+    if (e.key === "Enter") {
+      if (ref && ref.current) {
+        ref.current.focus();
+      }
+    }
+  };
 
   return (
     <>
-      <span className="bg-red-600 px-2 text-sm font-medium ">{error}</span>
-      <div className="flex gap-4 mb-4">
+      <div className="flex gap-4 mb-4 mt-2">
         <input
+          ref={PlatformRef}
           className="focus:outline-none bg-transparent border-2 border-[#5c6b81] focus:border-[#73a8f8] px-2"
           type="text"
           placeholder="Platform Name"
           onChange={(event) => {
             setPlatform(event.target.value);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              savePlatform(e);
+            }
           }}
         />
         <div className="flex justify-center items-center">
@@ -75,6 +88,9 @@ function AddPlatform({ onPlatformAdded }) {
           </svg>
         </div>
       </div>
+      <span className=" flex justify-center items-center text-yellow-300">
+        {error}
+      </span>
     </>
   );
 }

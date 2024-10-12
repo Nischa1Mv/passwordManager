@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { getFirestore, setDoc, doc, updateDoc } from "firebase/firestore";
 import { auth } from "./auth/firebase";
 import { encryptPassword } from "./Cypher";
@@ -10,15 +10,25 @@ const AddData = ({ platform, onDataAdded, setAdddetails, addDetails }) => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [error, setError] = useState("");
-  const userId = auth.currentUser.uid;
 
+  // refernces for the input fields
+  const usernameRef = useRef(null);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+  const userId = auth.currentUser.uid;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   // Saving data to Firestore
   const handleSave = async (event) => {
     event.preventDefault();
 
-    if (!email || !password) {
-      setError("Please fill in both email and password.");
-      setTimeout(() => setError(""), 500);
+    if (!email || !password || !username) {
+      setError("Please fill in all the Details.");
+      setTimeout(() => setError(""), 1500);
+      return;
+    }
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email.");
+      setTimeout(() => setError(""), 1500);
       return;
     }
 
@@ -52,6 +62,11 @@ const AddData = ({ platform, onDataAdded, setAdddetails, addDetails }) => {
       console.error("Error saving data:", error);
     }
   };
+  const handleKeyDown = (e, nextFieldRef) => {
+    if (e.key === "Enter" && nextFieldRef && nextFieldRef.current) {
+      nextFieldRef.current.focus();
+    }
+  };
 
   return (
     <>
@@ -59,6 +74,7 @@ const AddData = ({ platform, onDataAdded, setAdddetails, addDetails }) => {
         <div className="flex gap-4 justify-center items-center">
           <div>Username</div>
           <input
+            ref={usernameRef}
             placeholder="Username"
             required
             className="border-2  border-[#5c6b81] focus:border-[#73a8f8] bg-transparent focus:outline-none px-2"
@@ -67,11 +83,13 @@ const AddData = ({ platform, onDataAdded, setAdddetails, addDetails }) => {
             onChange={(event) => {
               setUsername(event.target.value);
             }}
+            onKeyDown={(e) => handleKeyDown(e, emailRef)}
           />
         </div>
         <div className="flex gap-4">
           <div>Email</div>
           <input
+            ref={emailRef}
             placeholder="Email"
             required
             className="border-2 border-[#5c6b81] focus:border-[#73a8f8]  bg-transparent focus:outline-none px-2"
@@ -80,9 +98,11 @@ const AddData = ({ platform, onDataAdded, setAdddetails, addDetails }) => {
             onChange={(event) => {
               setEmail(event.target.value);
             }}
+            onKeyDown={(e) => handleKeyDown(e, passwordRef)}
           />
           <div>Password</div>
           <input
+            ref={passwordRef}
             required
             placeholder="Password"
             className="border-2 border-[#5c6b81]  focus:border-[#73a8f8] bg-transparent focus:outline-none px-2"
@@ -91,6 +111,7 @@ const AddData = ({ platform, onDataAdded, setAdddetails, addDetails }) => {
             onChange={(event) => {
               setPassword(event.target.value);
             }}
+            onKeyDown={(e) => e.key === "Enter" && handleSave(e)}
           />
           <svg
             className="cursor-pointer"
