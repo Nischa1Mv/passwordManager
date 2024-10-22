@@ -49,13 +49,13 @@ function AddPlatform({ onPlatformAdded }) {
       console.error("Error saving data", error);
     }
   };
-  const handleKeyDown = (e, ref) => {
-    if (e.key === "Enter") {
-      if (ref && ref.current) {
-        ref.current.focus();
-      }
-    }
-  };
+  // const handleKeyDown = (e, ref) => {
+  //   if (e.key === "Enter") {
+  //     if (ref && ref.current) {
+  //       ref.current.focus();
+  //     }
+  //   }
+  // };
 
   return (
     <>

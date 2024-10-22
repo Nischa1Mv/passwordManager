@@ -123,11 +123,11 @@ function Main() {
       });
 
       setPError("Platform deleted successfully");
-      fetchPlatform();
     } catch (error) {
       setPError("Error deleting platform. Please try again.");
       console.error("Error deleting platform:", error);
     } finally {
+      fetchPlatform();
       setTimeout(() => {
         setPloading(false);
       }, 500);
