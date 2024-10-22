@@ -35,8 +35,8 @@ function Login() {
   const { email, password, error } = state;
 
   useEffect(() => {
-    const savedEmail = localStorage.getItem("email");
-    const savedPassword = localStorage.getItem("password");
+    // const savedEmail = localStorage.getItem("email");
+    // const savedPassword = localStorage.getItem("password");
     // if (savedEmail && savedPassword) {
     //   dispatchEvent({ type: "SET_EMAIL", payload: savedEmail });
     //   dispatchEvent({ type: "SET_PASSWORD", payload: savedPassword });
@@ -105,7 +105,11 @@ function Login() {
       setIsLoading(false);
     }
   };
-
+  const guestAuth = () => {
+    dispatchEvent({ type: "SET_EMAIL", payload: "guest@guest.com" });
+    dispatchEvent({ type: "SET_PASSWORD", payload: "guest123" });
+    setRememberMe(true);
+  };
   return (
     <>
       <div className=" w-screen h-screen text-white flex items-center justify-center">
@@ -152,16 +156,25 @@ function Login() {
               </div>
             </>
           )}
-
-          <button
-            className={`px-6 text- py-1 mt-2 text-[#00f0ff] border-2 rounded-xl transition-transform duration-200 cursor-pointer ${
-              isLoading ? "opacity-50 cursor-not-allowed" : "hover:scale-105"
-            }`}
-            type="submit"
-            disabled={isLoading || !state.email || !state.password}
-          >
-            {isLoading ? "Logging In..." : "Login"}
-          </button>
+          <div className="flex gap-2 items-center justify-center">
+            <button
+              className={`  px-6 py-1 mt-2 text-[#00f0ff] border-2 rounded-xl transition-transform duration-200 cursor-pointer ${
+                isLoading ? "opacity-50 cursor-not-allowed" : "hover:scale-105"
+              }`}
+              type="submit"
+              disabled={isLoading || !state.email || !state.password}
+            >
+              {isLoading ? "Logging In..." : "Login"}
+            </button>
+            <button
+              onClick={guestAuth}
+              className={`  px-6  py-1 mt-2 text-[#00f0ff] border-2 rounded-xl transition-transform duration-200 cursor-pointer ${
+                isLoading ? "opacity-50 cursor-not-allowed" : "hover:scale-105"
+              }`}
+            >
+              Guest Login
+            </button>
+          </div>
           <div className="mt-1">
             dont have an account ?{" "}
             <span
