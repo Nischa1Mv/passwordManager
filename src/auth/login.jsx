@@ -1,4 +1,4 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { useState, useEffect, useReducer } from "react";
 import { auth } from "./firebase";
 import { useNavigate } from "react-router-dom";
@@ -35,17 +35,15 @@ function Login() {
   const { email, password, error } = state;
 
   useEffect(() => {
-    // const savedEmail = localStorage.getItem("email");
-    // const savedPassword = localStorage.getItem("password");
-    // if (savedEmail && savedPassword) {
-    //   dispatchEvent({ type: "SET_EMAIL", payload: savedEmail });
-    //   dispatchEvent({ type: "SET_PASSWORD", payload: savedPassword });
-    //   setRememberMe(true);
-    // }
-    if (auth.currentUser) {
-      navigate("/");
-      console.log("user is logged in");
-    }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigate("/");
+        console.log("User is logged in");
+      }
+    });
+
+    // Cleanup the listener on component unmount
+    return () => unsubscribe();
   }, [navigate]);
 
   const AuthLogin = async (e) => {

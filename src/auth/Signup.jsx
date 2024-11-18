@@ -1,6 +1,9 @@
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { auth } from "./firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import InputWithLabel from "../custom Componets/inputWithLabel";
 
@@ -81,6 +84,16 @@ function Signup() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigate("/");
+        console.log("User is logged in");
+      }
+    });
+    return () => unsubscribe();
+  }, [navigate]);
 
   return (
     <div className="w-screen h-screen text-white flex items-center justify-center">
